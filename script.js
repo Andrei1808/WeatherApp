@@ -7,28 +7,11 @@ const button = document.querySelector('.header_button');
 const form = document.querySelector('.form');
 const input = document.querySelector('.header_inputText');
 const weekWeather = document.querySelector('.weekWeather');
-let requestValues = [];
-
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
-  if (!input.value) {
-    return false;
-  }
-  store.city = input.value;
-  requestValues.push(input.value)
-  fetchData();
-  input.value = '';
-  weekWeather.innerHTML = '';
-  console.log(requestValues)
-});
-
-
-
+const requestValues = [];
 
 const fetchData = async () => {
   const result = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${store.city}&appid=${apiKey}&units=metric`);
   const data = await result.json();
-
 
   const temp = document.querySelector('.temp');
   const city = document.querySelector('.city');
@@ -42,10 +25,21 @@ const fetchData = async () => {
   const feelsLike = document.querySelector('.feelsLike');
   const weatherBg = document.querySelector('.currentlyWeather');
   const requests = document.querySelector('.requests');
-  const requestElement_title = document.querySelector('.requestElement_title');
 
   console.log(data.list);
 
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!input.value) {
+      return false;
+    }
+    store.city = input.value;
+    requestValuesPush()
+    fetchData();
+    input.value = '';
+    weekWeather.innerHTML = '';
+    console.log(requestValues);
+  });
 
   // TODO:
   // Try Catch сделать для отлова ошибок
@@ -79,90 +73,47 @@ const fetchData = async () => {
   //= =====================================================================================================================================================
 
   async function weatherForWeek() {
-     /* const dailyData1 = data.list.filter((reading) => reading.dt_txt.includes('12:00:00')); */
-    const weekWeather = document.querySelector('.weekWeather');
     const DAY_MILSEC = 24 * 60 * 60 * 1000;
     const todayDate = new Date().getTime();
- 
 
-/*     console.log(dailyData1)
-    for (let i of dailyData1) {
-      weekWeather.innerHTML = i.weather[0].description
-      console.log(i.weather[0].description)
-  console.log(dailyData1[0].main.temp)
-} */
-    
-
-    
-    
-    
     for (let i = 0; i < 5; i++) {
-      for (const elem of data.list[0].weather) {
         const date = new Date(todayDate + DAY_MILSEC * i);
         const dailyData = data.list.filter((reading) => reading.dt_txt.includes(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`));
-    
-        /* console.log(dailyData) */
 
-  
-        
-        
-       
         //= =================================================================================================================================================
         // FIXME: функция для вычисления min/max температуры.
         const valuesOfMinMaxTemp = [];
         const weatherDescription = [];
         let choosedPic;
 
-        function pushArr(){
-        dailyData.forEach((elem) => {
-          valuesOfMinMaxTemp.push(elem.main.temp);
-          valuesOfMinMaxTemp.sort((a, b) => a - b);
-          weatherDescription.push([elem.weather[0].description, elem.weather[0].icon]);
- 
-        });
-        
-        }
-        pushArr()
-       /*  console.log(valuesOfMinMaxTemp) */
-
-        //TODO: тут нужно отсортировать картинки/описания и вывести самое много повторяющиеся
-        /* function weatherPicValue() {
-          let resultOfWeatherPic = {};
-          weatherPic.forEach(function (a) {
-            resultOfWeatherPic[a] = resultOfWeatherPic[a] + 1 || 1;
+        function pushArr() {
+          dailyData.forEach((elem) => {
+            valuesOfMinMaxTemp.push(elem.main.temp);
+            valuesOfMinMaxTemp.sort((a, b) => a - b);
+            weatherDescription.push([elem.weather[0].description, elem.weather[0].icon]);
           });
-          console.log(resultOfWeatherPic)
-
-          picAverrageValue = Object.entries(resultOfWeatherPic).sort((a, b) => a[1] - b[1]);
-          choosedWeatherPic = picAverrageValue[picAverrageValue.length - 1]
-          console.log( choosedWeatherPic[0])
-         
         }
-        weatherPicValue() */
-        //TODO: ДОстать от сюда правильные картинки (описания уже есть) Надо как-то по описанию достать правильную для него картинку.
+        pushArr();
+
         function weatherDescriptionValue() {
-          let resultOfWeatherDescription = {};
-          weatherDescription.forEach(function (elem) {
+          const resultOfWeatherDescription = {};
+          weatherDescription.forEach((elem) => {
             resultOfWeatherDescription[elem[0]] = resultOfWeatherDescription[elem[0]] + 1 || 1;
-           /*  console.log(elem) */
-                       
           });
 
           descriptionValue = Object.entries(resultOfWeatherDescription).sort((a, b) => a[1] - b[1]);
-          choosedDescr = descriptionValue[descriptionValue.length - 1]
-          /* console.log(descriptionValue) */
-         
+          choosedDescr = descriptionValue[descriptionValue.length - 1];
         }
-        weatherDescriptionValue()
+        weatherDescriptionValue();
 
-        function choosedPicFunc(){
-        weatherDescription.forEach(elem => {
-          if (elem.includes(choosedDescr[0])) {
-            choosedPic = elem[1]
-           
-          }
-        })}
-        choosedPicFunc()
+        function choosedPicFunc() {
+          weatherDescription.forEach((elem) => {
+            if (elem.includes(choosedDescr[0])) {
+              choosedPic = elem[1];
+            }
+          });
+        }
+        choosedPicFunc();
         //= =======================================================================================================
 
         weekWeather.innerHTML += `<div class="weekWeather_date">
@@ -171,43 +122,68 @@ const fetchData = async () => {
                 <h2 class="weekDay">${date.toString().substr(0, 3)}</h2>
                 <p class="date">${date.getDate()}/${date.getMonth() + 1}</p>
             </div>
-            <img src="http://openweathermap.org/img/wn/${choosedPic.replace('n','d')}@2x.png" alt="${choosedPic}">
+            <img src="http://openweathermap.org/img/wn/${choosedPic.replace('n', 'd')}@2x.png" alt="${choosedPic}">
             <div class="weekWeather_temp">
                 <p class="temp_week">${Math.round(valuesOfMinMaxTemp[valuesOfMinMaxTemp.length - 1])}°/${Math.round(valuesOfMinMaxTemp[0])}° </p>
             </div>
         </div>        
         <div class="weekWeather_subInfo">
-            <p>${choosedDescr[0].split(',')[0].split('.') // FIXME: Исправить описание и иконки, что бы оно было для правильного дня. Иконку и описание надо брать за 12.00 каждого дня.
+            <p>${choosedDescr[0].split(',')[0].split('.')
     .map((elem) => (choosedDescr[0].split(',')[0].replace(elem[0], elem[0].toUpperCase())))
     .join('')}</p>
         </div>  
-    </div>`; 
+    </div>`;
 
-        
-        
         if (data.list[0].sys.pod === 'n') {
           weekWeather.classList.add('night-theme');
         } else {
           weekWeather.classList.remove('night-theme');
         }
-      }
+      
     }
   }
   weatherForWeek();
 
 
+  const requestLastChild = document.querySelector('.requests > div:last-child');
+  const deleteCityButton = document.querySelector('.deleteCityButton')
+  const requestElement = document.querySelector('.requestElement')
 
   function previousRequests() {
-    console.log(requestValues)
-     requestValues.forEach(elem=>{
-      requests.innerHTML = ` <div class="requestElement">
-                    <p class="requestElement_title">${elem}</p>
-                    <button type="button"></button>
-                </div>  `
-                })
-                }
-  previousRequests()
+    console.log(requestValues);
+    console.log(requestLastChild);
+    if (requestValues.length <= 10
+      && requestValues.length) {
+      return requests.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
+        <p class="requestElement_title"> ${requestValues[0]}</p>
+        <button type="button" class='deleteCityButton'></button>
+    </div>  `);
+    }
+    else if (requestValues.length) {
+      requestValues.splice(10, 1);
+      requests.removeChild(requestLastChild);
+      return requests.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
+        <p class="requestElement_title"> ${requestValues[0]}</p>
+        <button type="button"></button>
+    </div>  `);
+    }
+  }
   
+  function requestValuesPush() {
+    if (!requestValues.includes(input.value)) {
+      requestValues.unshift(input.value);
+      previousRequests();
+    }else{return}
+  }
+
+ 
+//TODO: тут нужно сделать что бы удаленные элементы из списка, удалялись так же и из массива. Как вариант отфильтровать массив на совпадения с удаляющимся элементом и кдалить его из массива.
+  deleteCityButton.addEventListener('click',  function deleteCity() {
+    let city = deleteCityButton.closest('div')
+    city.remove() 
+  })
+
+
 };
 
 fetchData();
