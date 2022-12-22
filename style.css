@@ -1,0 +1,262 @@
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.wrapper{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 75px;
+    display: grid;
+    grid-template-areas: "header"
+                         "content"
+                         "footer";
+    grid-template-columns: 100%;
+    grid-template-rows: 70px minmax(calc(100vh - 120px), 1fr) 50px;
+    
+}
+
+.header{
+    grid-area: "header";
+    width: 100% ;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #000;
+    color: orange;
+    padding: 0;
+    margin: 0;
+
+}
+
+.logo{
+    font-size: 35px;
+    margin: 0 20px;
+    font-weight: 700;
+}
+
+.form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 30px 0 0 ;
+}
+
+.header_inputText{
+    height: 30px;
+    width: 200px;
+    border-radius: 5px 0 0 5px;
+    border: none;
+    margin: 0 0 0 5px;
+    outline: none;
+    padding: 0 10px;
+    box-sizing: border-box;
+    font-size: 18px;
+
+}
+
+.header_button{
+    height: 30px;
+    width: 75px;
+    border-radius: 0 5px 5px 0;
+    border: none;
+    margin: 0;
+    padding: 0;     
+    background-color: orange;
+    color: white;
+    cursor: pointer;
+}
+
+.header_prevRequest{
+    background-color: black;
+    color: white;
+    font-size: 30px;
+    margin: 0 0 0 30px
+}
+
+.content{
+    width: 90%;
+    position: relative;
+    background-color: red;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.currentlyWeather{
+    margin: 50px 10px;
+    height: 75%;
+    width: 30%;
+    max-width: 450px;
+    background: linear-gradient(0deg, rgba(118,236,255,1) 38%, rgba(0,158,246,1) 100%);
+    position: relative;
+    border-radius: 20px;
+}
+
+.temp{
+    position: absolute;
+    top: 0;
+    right: 9px;
+    font-size: 130px;
+    color: white;
+    font-weight: 700;
+    
+}
+
+.city{
+    position: absolute;
+    top: 25px;
+    left: 20px;
+    font-size: 35px;
+    color: white;
+    font-weight: 700;
+}
+
+.city span{
+    font-size: 12px;
+    font-weight: 400;
+    position: absolute;
+    top: -5px;
+    min-width: 100px;
+
+}    
+
+.wethDescription{
+    position: absolute;
+    top: 180px;
+    left: 20px;
+    font-size: 28px;
+    font-weight: 600;
+    color: white;
+}
+
+.imgWeather{
+    position: absolute;
+    top: -110px;
+    left: -10px;
+    width: 120px;
+}
+
+.subInfo{
+    width: 100%;
+    height: 50%;
+    position: absolute;
+    top: 50%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.subInfo img{
+   width: 45px;
+   height: 45px;
+}
+
+.subInfo div{
+    width: 48%;
+    height: 33%;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    margin: 0 0 0 2%
+}
+
+.weatherSubInfo{
+    display: flex;
+    flex-direction: column;
+    font-size: 25px;
+    margin: 0 5px;
+    font-weight: 700;
+
+}
+
+.subInfoParameters{
+    opacity: .3;
+    margin: 0 5px;
+    font-size: 15px;
+}
+
+.subInfoWrapper{
+    margin: 0;
+}
+
+.weekWeather{
+    margin: 50px 0;
+    height: 75%;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(0deg, rgba(118,236,255,1) 38%, rgba(0,158,246,1) 100%);
+    border-radius: 20px; 
+    color: white;   
+}
+
+.weekDay{
+    margin: 0;
+}
+
+.weekWeather_date{
+    height: 20%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+}
+
+.weekWeather_date-wrapper{
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.weekWeather_day{
+    width: 100px;
+}
+
+.temp_week{
+    font-size: 20px;
+    width: 75px;
+}
+
+.weekWeather_subInfo{
+    font-size: 21px;
+}
+
+.night-theme{
+    background: linear-gradient(0deg, rgba(111,122,238,1) 0%, rgba(81,55,122,1) 100%);
+}
+
+.requests{
+   
+    width: 38%;
+    height: 100%;
+    background-color: blue;
+
+}
+
+.requestElement{
+    display: flex;
+    justify-content: space-between;
+    margin: 7px 7px;
+    font-size: 18px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.footer{
+    background-color: grey;
+}
