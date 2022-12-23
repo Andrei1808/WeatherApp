@@ -25,7 +25,9 @@ const fetchData = async () => {
   const feelsLike = document.querySelector('.feelsLike');
   const weatherBg = document.querySelector('.currentlyWeather');
   const requests = document.querySelector('.requests');
+  
 
+  
   console.log(data.list);
 
   form.addEventListener('submit', (event) => {
@@ -145,21 +147,21 @@ const fetchData = async () => {
   weatherForWeek();
 
 
-  const requestLastChild = document.querySelector('.requests > div:last-child');
-  const deleteCityButton = document.querySelector('.deleteCityButton')
-  const requestElement = document.querySelector('.requestElement')
 
   function previousRequests() {
+    const requestLastChild = document.querySelector('.requests > div:last-child');
+
     console.log(requestValues);
     console.log(requestLastChild);
-    if (requestValues.length <= 10
+    if (requestValues.length <= 3
       && requestValues.length) {
       return requests.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
         <p class="requestElement_title"> ${requestValues[0]}</p>
         <button type="button" class='deleteCityButton'></button>
     </div>  `);
     }
-    else if (requestValues.length) {
+    else {
+      console.log(requestLastChild)
       requestValues.splice(10, 1);
       requests.removeChild(requestLastChild);
       return requests.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
@@ -176,8 +178,10 @@ const fetchData = async () => {
     }else{return}
   }
 
- 
+  const deleteCityButton = document.querySelector('.deleteCityButton')
+   
 //TODO: тут нужно сделать что бы удаленные элементы из списка, удалялись так же и из массива. Как вариант отфильтровать массив на совпадения с удаляющимся элементом и кдалить его из массива.
+  // Еще при удалении элемента удаляется полностью массив и больще не появляется до обновления
   deleteCityButton.addEventListener('click',  function deleteCity() {
     let city = deleteCityButton.closest('div')
     city.remove() 
