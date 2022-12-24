@@ -25,10 +25,9 @@ const fetchData = async () => {
   const feelsLike = document.querySelector('.feelsLike');
   const weatherBg = document.querySelector('.currentlyWeather');
   const requests = document.querySelector('.requests');
-  
 
-  
   console.log(data.list);
+  console.log(requestValues);
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -36,7 +35,7 @@ const fetchData = async () => {
       return false;
     }
     store.city = input.value;
-    requestValuesPush()
+    requestValuesPush();
     fetchData();
     input.value = '';
     weekWeather.innerHTML = '';
@@ -79,46 +78,46 @@ const fetchData = async () => {
     const todayDate = new Date().getTime();
 
     for (let i = 0; i < 5; i++) {
-        const date = new Date(todayDate + DAY_MILSEC * i);
-        const dailyData = data.list.filter((reading) => reading.dt_txt.includes(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`));
+      const date = new Date(todayDate + DAY_MILSEC * i);
+      const dailyData = data.list.filter((reading) => reading.dt_txt.includes(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`));
 
-        //= =================================================================================================================================================
-        // FIXME: функция для вычисления min/max температуры.
-        const valuesOfMinMaxTemp = [];
-        const weatherDescription = [];
-        let choosedPic;
+      //= =================================================================================================================================================
+      // FIXME: функция для вычисления min/max температуры.
+      const valuesOfMinMaxTemp = [];
+      const weatherDescription = [];
+      let choosedPic;
 
-        function pushArr() {
-          dailyData.forEach((elem) => {
-            valuesOfMinMaxTemp.push(elem.main.temp);
-            valuesOfMinMaxTemp.sort((a, b) => a - b);
-            weatherDescription.push([elem.weather[0].description, elem.weather[0].icon]);
-          });
-        }
-        pushArr();
+      function pushArr() {
+        dailyData.forEach((elem) => {
+          valuesOfMinMaxTemp.push(elem.main.temp);
+          valuesOfMinMaxTemp.sort((a, b) => a - b);
+          weatherDescription.push([elem.weather[0].description, elem.weather[0].icon]);
+        });
+      }
+      pushArr();
 
-        function weatherDescriptionValue() {
-          const resultOfWeatherDescription = {};
-          weatherDescription.forEach((elem) => {
-            resultOfWeatherDescription[elem[0]] = resultOfWeatherDescription[elem[0]] + 1 || 1;
-          });
+      function weatherDescriptionValue() {
+        const resultOfWeatherDescription = {};
+        weatherDescription.forEach((elem) => {
+          resultOfWeatherDescription[elem[0]] = resultOfWeatherDescription[elem[0]] + 1 || 1;
+        });
 
-          descriptionValue = Object.entries(resultOfWeatherDescription).sort((a, b) => a[1] - b[1]);
-          choosedDescr = descriptionValue[descriptionValue.length - 1];
-        }
-        weatherDescriptionValue();
+        descriptionValue = Object.entries(resultOfWeatherDescription).sort((a, b) => a[1] - b[1]);
+        choosedDescr = descriptionValue[descriptionValue.length - 1];
+      }
+      weatherDescriptionValue();
 
-        function choosedPicFunc() {
-          weatherDescription.forEach((elem) => {
-            if (elem.includes(choosedDescr[0])) {
-              choosedPic = elem[1];
-            }
-          });
-        }
-        choosedPicFunc();
-        //= =======================================================================================================
+      function choosedPicFunc() {
+        weatherDescription.forEach((elem) => {
+          if (elem.includes(choosedDescr[0])) {
+            choosedPic = elem[1];
+          }
+        });
+      }
+      choosedPicFunc();
+      //= =======================================================================================================
 
-        weekWeather.innerHTML += `<div class="weekWeather_date">
+      weekWeather.innerHTML += `<div class="weekWeather_date">
         <div class="weekWeather_date-wrapper">
             <div class="weekWeather_day">
                 <h2 class="weekDay">${date.toString().substr(0, 3)}</h2>
@@ -136,58 +135,66 @@ const fetchData = async () => {
         </div>  
     </div>`;
 
-        if (data.list[0].sys.pod === 'n') {
-          weekWeather.classList.add('night-theme');
-        } else {
-          weekWeather.classList.remove('night-theme');
-        }
-      
+      if (data.list[0].sys.pod === 'n') {
+        weekWeather.classList.add('night-theme');
+      } else {
+        weekWeather.classList.remove('night-theme');
+      }
     }
   }
   weatherForWeek();
 
-
-
   function previousRequests() {
     const requestLastChild = document.querySelector('.requests > div:last-child');
 
-    console.log(requestValues);
-    console.log(requestLastChild);
-    if (requestValues.length <= 3
-      && requestValues.length) {
-      return requests.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
-        <p class="requestElement_title"> ${requestValues[0]}</p>
-        <button type="button" class='deleteCityButton'></button>
-    </div>  `);
-    }
-    else {
-      console.log(requestLastChild)
+    for (let i = 0; i < requestValues.length; i++) {
+      if (requestValues.length <= 10) {
+        console.log(requestValues);
+        return requests.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
+          <p class="requestElement_title"> ${requestValues[i]}</p>
+          <button type="button" class='deleteCityButton'></button>
+      </div>  `);
+      }
+
       requestValues.splice(10, 1);
       requests.removeChild(requestLastChild);
+      console.log(requestValues.length);
       return requests.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
-        <p class="requestElement_title"> ${requestValues[0]}</p>
-        <button type="button"></button>
-    </div>  `);
+          <p class="requestElement_title"> ${requestValues[i]}</p>
+          <button type="button" class='deleteCityButton'></button>
+      </div>  `);
     }
   }
-  
+  console.log(requestValues);
+
   function requestValuesPush() {
     if (!requestValues.includes(input.value)) {
       requestValues.unshift(input.value);
       previousRequests();
-    }else{return}
+    } else { }
   }
 
-  const deleteCityButton = document.querySelector('.deleteCityButton')
-   
-//TODO: тут нужно сделать что бы удаленные элементы из списка, удалялись так же и из массива. Как вариант отфильтровать массив на совпадения с удаляющимся элементом и кдалить его из массива.
-  // Еще при удалении элемента удаляется полностью массив и больще не появляется до обновления
-  deleteCityButton.addEventListener('click',  function deleteCity() {
-    let city = deleteCityButton.closest('div')
-    city.remove() 
-  })
+  const deleteCityButton = document.querySelector('.deleteCityButton');
 
+  console.log(requestValues);
 
+  deleteCityButton.addEventListener('click', (event) => {
+    /* console.log(event.target.previousElementSibling.textContent) */
+    console.log(requestValues);
+    console.log('NASHAL!');
+
+    const city = deleteCityButton.closest('.requestElement');
+    city.remove();
+
+    const deleteCityInArray = event.target.previousElementSibling.textContent.trim();
+    const indexCityInArray = requestValues.indexOf(deleteCityInArray);
+    requestValues.splice(indexCityInArray, 1);
+    event.stopImmediatePropagation();
+
+    console.log(requestValues);
+    console.log(deleteCityInArray);
+    console.log(indexCityInArray);
+  });
 };
 
 fetchData();
