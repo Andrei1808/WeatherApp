@@ -13,7 +13,7 @@ let requestValues = localStorage.getItem('items') ? JSON.parse(localStorage.getI
 
 
 const fetchData = async () => {
-  try{
+ 
   const result = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${store.city}&appid=${apiKey}&units=metric`);
   const data = await result.json();
 
@@ -213,24 +213,23 @@ reload()
  
 
   const deleteCityButton = document.querySelectorAll('.deleteCityButton');
-  let dataElem = JSON.parse(localStorage.getItem('items'))
 
   console.log(requestValues);
 
   deleteCityButton.forEach(elem => {
     elem.addEventListener('click', (event) => {
       const deleteCityInArray = event.target.previousElementSibling.textContent.trim();
-      const indexCityInArray = dataElem.indexOf(deleteCityInArray);
+      const indexCityInArray = requestValues.indexOf(deleteCityInArray);
       const deletedCity = elem.closest('.requestElement');
     
-      if (dataElem.length === 1) {
-        dataElem.splice(indexCityInArray, 1)
+      if (requestValues.length === 1) {
+        requestValues.splice(indexCityInArray, 1)
         deletedCity.remove();
         localStorage.clear()
       } else {
-        dataElem.splice(indexCityInArray, 1)
+        requestValues.splice(indexCityInArray, 1)
         deletedCity.remove();
-        localStorage.setItem('items', JSON.stringify(dataElem));
+        localStorage.setItem('items', JSON.stringify(requestValues));
       }
 
     });
@@ -239,9 +238,6 @@ reload()
   })
   
 
-  } catch {
-
-    
-}};
+ };
 
 fetchData();
