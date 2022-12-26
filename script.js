@@ -7,11 +7,17 @@ const button = document.querySelector('.header_button');
 const form = document.querySelector('.form');
 const input = document.querySelector('.header_inputText');
 const weekWeather = document.querySelector('.weekWeather');
-const requestValues = [];
+let requestValues = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : [];
+
+
+
 
 const fetchData = async () => {
+  try{
   const result = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${store.city}&appid=${apiKey}&units=metric`);
   const data = await result.json();
+
+  
 
   const temp = document.querySelector('.temp');
   const city = document.querySelector('.city');
@@ -41,6 +47,9 @@ const fetchData = async () => {
     weekWeather.innerHTML = '';
     console.log(requestValues);
   });
+
+
+
 
   // TODO:
   // Try Catch сделать для отлова ошибок
@@ -144,57 +153,95 @@ const fetchData = async () => {
   }
   weatherForWeek();
 
+  
+
   function previousRequests() {
     const requestLastChild = document.querySelector('.requests > div:last-child');
-
+   
     for (let i = 0; i < requestValues.length; i++) {
-      if (requestValues.length <= 10) {
+      if (requestValues.length <= 3) {
+
         console.log(requestValues);
-        return requests.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
+      
+           return requests.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
           <p class="requestElement_title"> ${requestValues[i]}</p>
           <button type="button" class='deleteCityButton'></button>
       </div>  `);
-      }
-
-      requestValues.splice(10, 1);
-      requests.removeChild(requestLastChild);
+       
+      }else{
+        requests.removeChild(requestLastChild);
+        requestValues.splice(3, 1);
+        localStorage.removeItem(requestValues[requestValues.length - 1])
+        localStorage.setItem('items', JSON.stringify(requestValues));
       console.log(requestValues.length);
       return requests.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
           <p class="requestElement_title"> ${requestValues[i]}</p>
           <button type="button" class='deleteCityButton'></button>
-      </div>  `);
+      </div>  `);}
     }
   }
-  console.log(requestValues);
+  
+ //TODO: нужно проверять еще есть ли уже такое значени в массиве или нет, эта функ вызывалась в requestValuePush
 
   function requestValuesPush() {
     if (!requestValues.includes(input.value)) {
       requestValues.unshift(input.value);
-      previousRequests();
-    } else { }
+      localStorage.setItem('items', JSON.stringify(requestValues));
+      previousRequests()
+    } 
   }
 
-  const deleteCityButton = document.querySelector('.deleteCityButton');
+  
+  console.log(localStorage.getItem('items'))
+  console.log('items', JSON.stringify(requestValues))
+  console.log(JSON.parse(localStorage.getItem('items')))
+
+  
+  function reload() {
+    requests.innerHTML = ''
+    if (localStorage.getItem('items') !== []) {
+      requestValues.forEach(elem => {
+        return requests.insertAdjacentHTML('beforeend', ` <div class="requestElement">
+        <p class="requestElement_title"> ${elem}</p>
+        <button type="button" class='deleteCityButton'></button>
+    </div>  `);
+      })
+    }
+  }
+reload()
+
+ 
+
+  const deleteCityButton = document.querySelectorAll('.deleteCityButton');
+  let dataElem = JSON.parse(localStorage.getItem('items'))
 
   console.log(requestValues);
 
-  deleteCityButton.addEventListener('click', (event) => {
-    /* console.log(event.target.previousElementSibling.textContent) */
-    console.log(requestValues);
-    console.log('NASHAL!');
+  deleteCityButton.forEach(elem => {
+    elem.addEventListener('click', (event) => {
+      const deleteCityInArray = event.target.previousElementSibling.textContent.trim();
+      const indexCityInArray = dataElem.indexOf(deleteCityInArray);
+      const deletedCity = elem.closest('.requestElement');
+    
+      if (dataElem.length === 1) {
+        dataElem.splice(indexCityInArray, 1)
+        deletedCity.remove();
+        localStorage.clear()
+      } else {
+        dataElem.splice(indexCityInArray, 1)
+        deletedCity.remove();
+        localStorage.setItem('items', JSON.stringify(dataElem));
+      }
 
-    const city = deleteCityButton.closest('.requestElement');
-    city.remove();
+    });
+  
 
-    const deleteCityInArray = event.target.previousElementSibling.textContent.trim();
-    const indexCityInArray = requestValues.indexOf(deleteCityInArray);
-    requestValues.splice(indexCityInArray, 1);
-    event.stopImmediatePropagation();
+  })
+  
 
-    console.log(requestValues);
-    console.log(deleteCityInArray);
-    console.log(indexCityInArray);
-  });
-};
+  } catch {
+
+    
+}};
 
 fetchData();
