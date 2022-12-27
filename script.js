@@ -10,14 +10,11 @@ const weekWeather = document.querySelector('.weekWeather');
 let requestValues = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : [];
 
 
-
-
 const fetchData = async () => {
- 
+ try{
   const result = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${store.city}&appid=${apiKey}&units=metric`);
   const data = await result.json();
 
-  
 
   const temp = document.querySelector('.temp');
   const city = document.querySelector('.city');
@@ -32,21 +29,48 @@ const fetchData = async () => {
   const weatherBg = document.querySelector('.currentlyWeather');
   const requests = document.querySelector('.requests');
 
+   
+   
+   
+   requests.addEventListener('click', event => {
+     console.log(event.target)
+   event.stopImmediatePropagation()
+       console.log(event.target.closest('div'))
+       store.city= event.target.closest('.requestElement_title').textContent
+     console.log(store.city)
+     weekWeather.innerHTML = '';
+     fetchData()
+  })
+ 
+  
+   
   console.log(data.list);
-  console.log(requestValues);
+   console.log(requestValues);
+   
+  
+ 
+   
 
+
+   input.addEventListener('input', (event) => {
+     input.value = input.value.replace(/[^a-z\s]/gi, '')
+                                  .toLowerCase(); 
+   })
+   
   form.addEventListener('submit', (event) => {
     event.preventDefault();
+    
     if (!input.value) {
       return false;
-    }
+    } else {
     store.city = input.value;
     requestValuesPush();
     fetchData();
     input.value = '';
     weekWeather.innerHTML = '';
-    console.log(requestValues);
+    console.log(requestValues);}
   });
+
 
 
 
@@ -184,8 +208,8 @@ const fetchData = async () => {
  //TODO: нужно проверять еще есть ли уже такое значени в массиве или нет, эта функ вызывалась в requestValuePush
 
   function requestValuesPush() {
-    if (!requestValues.includes(input.value)) {
-      requestValues.unshift(input.value);
+    if (!requestValues.includes(input.value.replace(input.value[0], input.value[0].toUpperCase()))) {
+      requestValues.unshift(input.value.replace(input.value[0], input.value[0].toUpperCase()));
       localStorage.setItem('items', JSON.stringify(requestValues));
       previousRequests()
     } 
@@ -236,7 +260,25 @@ reload()
   
 
   })
+ } catch (err) {
+   console.error('ERROR!',err.message)
+   console.error(requestValues)
+   if (requestValues.length === 1) {
+     requestValues.splice(0, 1)
+     console.error(requestValues)
+     localStorage.clear()
+     store.city = 'Minsk'
+   } else {
+     requestValues.splice(0, 1)
+     store.city = requestValues[0]
+    }
+
+   localStorage.setItem('items', JSON.stringify(requestValues));
   
+
+   fetchData();
+
+}  
 
  };
 
