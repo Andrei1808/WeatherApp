@@ -5,6 +5,7 @@ const store = {
 
 const button = document.querySelector('.header_button');
 const form = document.querySelector('.form');
+const wrapper = document.querySelector('.wrapper')
 const input = document.querySelector('.header_inputText');
 const weekWeather = document.querySelector('.weekWeather');
 let requestValues = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : [];
@@ -32,15 +33,18 @@ const fetchData = async () => {
    
    
    
-   requests.addEventListener('click', event => {
-     console.log(event.target)
-   event.stopImmediatePropagation()
-       console.log(event.target.closest('div'))
-       store.city= event.target.closest('.requestElement_title').textContent
-     console.log(store.city)
-     weekWeather.innerHTML = '';
-     fetchData()
-  })
+   document.addEventListener('click', event => {
+    if(event.target.matches('p') && null !== event.target.closest('.requestElement')) {
+      console.log(event.target)
+      event.stopImmediatePropagation()
+          console.log(event.target.closest('div'))
+          store.city= event.target.closest('.requestElement_title').textContent
+        console.log(store.city)
+        weekWeather.innerHTML = '';
+        fetchData()
+  }
+});
+    
  
   
    
@@ -88,11 +92,7 @@ const fetchData = async () => {
     feelsLike.innerHTML = `${Math.round(data.list[0].main.feels_like)}°`;
     city.innerHTML = `<span>Weather today in:</span>
         ${data.city.name}`;
-    if (data.list[0].sys.pod === 'n') {
-      weatherBg.classList.add('night-theme');
-    } else {
-      weatherBg.classList.remove('night-theme');
-    }
+   
 
     for (const elem of data.list[0].weather) {
       wethDescription.innerHTML = elem.description.split('.')
@@ -109,16 +109,18 @@ const fetchData = async () => {
   async function weatherForWeek() {
     const DAY_MILSEC = 24 * 60 * 60 * 1000;
     const todayDate = new Date().getTime();
+   
+
 
     for (let i = 0; i < 5; i++) {
       const date = new Date(todayDate + DAY_MILSEC * i);
       const dailyData = data.list.filter((reading) => reading.dt_txt.includes(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`));
-
-      //= =================================================================================================================================================
-      // FIXME: функция для вычисления min/max температуры.
       const valuesOfMinMaxTemp = [];
       const weatherDescription = [];
       let choosedPic;
+      //= =================================================================================================================================================
+      // FIXME: функция для вычисления min/max температуры.
+    
 
       function pushArr() {
         dailyData.forEach((elem) => {
@@ -144,12 +146,13 @@ const fetchData = async () => {
         weatherDescription.forEach((elem) => {
           if (elem.includes(choosedDescr[0])) {
             choosedPic = elem[1];
+            console.log(choosedPic)
           }
         });
       }
       choosedPicFunc();
       //= =======================================================================================================
-
+  
       weekWeather.innerHTML += `<div class="weekWeather_date">
         <div class="weekWeather_date-wrapper">
             <div class="weekWeather_day">
@@ -167,11 +170,11 @@ const fetchData = async () => {
     .join('')}</p>
         </div>  
     </div>`;
-
+console.log(choosedPic)
       if (data.list[0].sys.pod === 'n') {
-        weekWeather.classList.add('night-theme');
+        wrapper.classList.add('night-theme');
       } else {
-        weekWeather.classList.remove('night-theme');
+        wrapper.classList.remove('night-theme');
       }
     }
   }
@@ -180,25 +183,25 @@ const fetchData = async () => {
   
 
   function previousRequests() {
-    const requestLastChild = document.querySelector('.requests > div:last-child');
+    const requestLastChild = document.querySelector('.prevRequest > div:last-child');
    
     for (let i = 0; i < requestValues.length; i++) {
       if (requestValues.length <= 3) {
 
         console.log(requestValues);
       
-           return requests.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
+           return prevRequest.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
           <p class="requestElement_title"> ${requestValues[i]}</p>
           <button type="button" class='deleteCityButton'></button>
       </div>  `);
        
       }else{
-        requests.removeChild(requestLastChild);
+        prevRequest.removeChild(requestLastChild);
         requestValues.splice(3, 1);
         localStorage.removeItem(requestValues[requestValues.length - 1])
         localStorage.setItem('items', JSON.stringify(requestValues));
       console.log(requestValues.length);
-      return requests.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
+      return prevRequest.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
           <p class="requestElement_title"> ${requestValues[i]}</p>
           <button type="button" class='deleteCityButton'></button>
       </div>  `);}
@@ -220,12 +223,14 @@ const fetchData = async () => {
   console.log('items', JSON.stringify(requestValues))
   console.log(JSON.parse(localStorage.getItem('items')))
 
+   const prevRequest = document.querySelector('.prevRequest')
   
   function reload() {
-    requests.innerHTML = ''
+    prevRequest.innerHTML = ''
     if (localStorage.getItem('items') !== []) {
       requestValues.forEach(elem => {
-        return requests.insertAdjacentHTML('beforeend', ` <div class="requestElement">
+        console.log(elem)
+        return prevRequest.insertAdjacentHTML('beforeend', ` <div class="requestElement">
         <p class="requestElement_title"> ${elem}</p>
         <button type="button" class='deleteCityButton'></button>
     </div>  `);

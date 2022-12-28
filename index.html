@@ -11,11 +11,9 @@
 <body>
     <div class="wrapper">
         <div class="header">
-            <div class="logo">MyWeather</div>
             <form class="form">
                 <input type="text" class="header_inputText" placeholder="Search">
                 <button type="submit" class="header_button">Click</button>
-                <button type="button" class="header_prevRequest"><i class="fa-solid fa-ellipsis"></i></button>
             </form>
         </div>
         <div class="content">
@@ -24,24 +22,23 @@
                 <div class="city"></div>
                 <div class="wethDescription"></div>
                 <img class="imgWeather" alt="weatherImg">
-                <div class="subInfo">
-                    <div> <img src="https://i.ibb.co/dJ6q2TP/cloud.png" alt="cloud" border="0"><p class="subInfoWrapper"><span class="weatherSubInfo cloudcover"></span><span class="subInfoParameters">cloudcover</span></p></div>
-                    <div><img src="https://i.ibb.co/3kqgj43/gauge.png" alt="gauge" border="0"><p class="subInfoWrapper"><span class="weatherSubInfo pressure"></span><span class="subInfoParameters">pressure</span></p></div>
-                    <div><img src="https://i.ibb.co/6J8F6j9/humidity.png" alt="humidity" border="0"><p class="subInfoWrapper"><span class="weatherSubInfo humidity"></span><span class="subInfoParameters">humidity</span></p></div>
-                    <div><img src="https://i.ibb.co/yVysz2n/thermometer.png" alt="thermometer" border="0"><p class="subInfoWrapper"><span class="weatherSubInfo feelsLike"></span><span class="subInfoParameters">feels like</span></p></div>
-                    <div><img src="https://i.ibb.co/HYFZzMK/visibility.png" alt="visibility" border="0"><p class="subInfoWrapper"><span class="weatherSubInfo visibility"></span><span class="subInfoParameters">visibility</span></p></div>
-                    <div><img src="https://i.ibb.co/Y20RdNM/wind.png" alt="wind" border="0"><p class="subInfoWrapper"><span class="weatherSubInfo wind"></span><span class="subInfoParameters">wind</span></p></div>
-                </div>
+            </div>
+            <div class="subInfo">
+                <div> <img src="https://i.ibb.co/dJ6q2TP/cloud.png" alt="cloud" border="0"><p class="subInfoWrapper"><span class="weatherSubInfo cloudcover"></span><span class="subInfoParameters">cloudcover</span></p></div>
+                <div><img src="https://i.ibb.co/3kqgj43/gauge.png" alt="gauge" border="0"><p class="subInfoWrapper"><span class="weatherSubInfo pressure"></span><span class="subInfoParameters">pressure</span></p></div>
+                <div><img src="https://i.ibb.co/6J8F6j9/humidity.png" alt="humidity" border="0"><p class="subInfoWrapper"><span class="weatherSubInfo humidity"></span><span class="subInfoParameters">humidity</span></p></div>
+                <div><img src="https://i.ibb.co/yVysz2n/thermometer.png" alt="thermometer" border="0"><p class="subInfoWrapper"><span class="weatherSubInfo feelsLike"></span><span class="subInfoParameters">feels like</span></p></div>
+                <div><img src="https://i.ibb.co/HYFZzMK/visibility.png" alt="visibility" border="0"><p class="subInfoWrapper"><span class="weatherSubInfo visibility"></span><span class="subInfoParameters">visibility</span></p></div>
+                <div><img src="https://i.ibb.co/Y20RdNM/wind.png" alt="wind" border="0"><p class="subInfoWrapper"><span class="weatherSubInfo wind"></span><span class="subInfoParameters">wind</span></p></div>
             </div>
             <div class="weekWeather">
             </div>
             <div class="requests">
-                
+                <div class="requestTitle"><h3>Previous requests:</h3></div>
+                <div class="prevRequest"></div>
             </div>
         </div>
-      
-        <div class="footer"></div>
-    </div>
+        </div>
     <script src="script.js"></script>
     <script src="https://kit.fontawesome.com/f1e8d0e4bb.js" crossorigin="anonymous"></script>
 </body>
