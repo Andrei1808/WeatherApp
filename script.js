@@ -9,13 +9,16 @@ const wrapper = document.querySelector('.wrapper')
 const input = document.querySelector('.header_inputText');
 const weekWeather = document.querySelector('.weekWeather');
 let requestValues = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : [];
+let arr = []
+const prevRequest = document.querySelector('.prevRequest')
 
 
 const fetchData = async () => {
  try{
   const result = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${store.city}&appid=${apiKey}&units=metric`);
   const data = await result.json();
-
+   
+   console.log(result.status)
 
   const temp = document.querySelector('.temp');
   const city = document.querySelector('.city');
@@ -27,7 +30,7 @@ const fetchData = async () => {
   const visibility = document.querySelector('.visibility');
   const wind = document.querySelector('.wind');
   const feelsLike = document.querySelector('.feelsLike');
-  const weatherBg = document.querySelector('.currentlyWeather');
+  const subInfo = document.querySelector('.subInfo');
   const requests = document.querySelector('.requests');
 
    
@@ -77,10 +80,6 @@ const fetchData = async () => {
 
 
 
-
-
-  // TODO:
-  // Try Catch сделать для отлова ошибок
   // FIXME: Одна карточка!
   function currentlyWeather() {
     temp.innerHTML = `${Math.round(data.list[0].main.temp)}°`;
@@ -105,24 +104,28 @@ const fetchData = async () => {
   currentlyWeather();
 
   //= =====================================================================================================================================================
-
-  async function weatherForWeek() {
+  
+  function weatherForWeek() {
     const DAY_MILSEC = 24 * 60 * 60 * 1000;
     const todayDate = new Date().getTime();
-   
-
+    
+//TODO: с 00 до 12 (от 0 до 5), с 12 до 00:00(c 1 по 6)
 
     for (let i = 0; i < 5; i++) {
       const date = new Date(todayDate + DAY_MILSEC * i);
-      const dailyData = data.list.filter((reading) => reading.dt_txt.includes(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`));
+      const getMonth = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)
+      const getDate = date.getDate() < 10 ? '0'+date.getDate() : date.getDate()
+      const dailyData = data.list.filter((reading) => reading.dt_txt.includes(`${date.getFullYear()}-${getMonth}-${getDate}`));
       const valuesOfMinMaxTemp = [];
       const weatherDescription = [];
       let choosedPic;
+      
       //= =================================================================================================================================================
       // FIXME: функция для вычисления min/max температуры.
     
-
+    
       function pushArr() {
+       
         dailyData.forEach((elem) => {
           valuesOfMinMaxTemp.push(elem.main.temp);
           valuesOfMinMaxTemp.sort((a, b) => a - b);
@@ -130,6 +133,9 @@ const fetchData = async () => {
         });
       }
       pushArr();
+
+    
+
 
       function weatherDescriptionValue() {
         const resultOfWeatherDescription = {};
@@ -142,17 +148,18 @@ const fetchData = async () => {
       }
       weatherDescriptionValue();
 
+     
       function choosedPicFunc() {
         weatherDescription.forEach((elem) => {
           if (elem.includes(choosedDescr[0])) {
             choosedPic = elem[1];
-            console.log(choosedPic)
           }
         });
       }
       choosedPicFunc();
       //= =======================================================================================================
   
+
       weekWeather.innerHTML += `<div class="weekWeather_date">
         <div class="weekWeather_date-wrapper">
             <div class="weekWeather_day">
@@ -170,37 +177,46 @@ const fetchData = async () => {
     .join('')}</p>
         </div>  
     </div>`;
-console.log(choosedPic)
+
       if (data.list[0].sys.pod === 'n') {
         wrapper.classList.add('night-theme');
+        requests.classList.add('night-theme_smokeBg');
+        subInfo.classList.add('night-theme_smokeBg');
+        weekWeather.classList.add('night-theme_smokeBg');
       } else {
         wrapper.classList.remove('night-theme');
+        requests.classList.remove('night-theme_smokeBg');
+        subInfo.classList.remove('night-theme_smokeBg');
+        weekWeather.classList.remove('night-theme_smokeBg');
       }
     }
   }
   weatherForWeek();
 
-  
+
 
   function previousRequests() {
     const requestLastChild = document.querySelector('.prevRequest > div:last-child');
    
+   
     for (let i = 0; i < requestValues.length; i++) {
       if (requestValues.length <= 3) {
 
-        console.log(requestValues);
+  
       
            return prevRequest.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
           <p class="requestElement_title"> ${requestValues[i]}</p>
           <button type="button" class='deleteCityButton'></button>
       </div>  `);
        
-      }else{
+      } else {
         prevRequest.removeChild(requestLastChild);
+        console.log(arr)
+        arr.push(requestValues[requestValues.length - 1])
         requestValues.splice(3, 1);
+        console.log(arr)
         localStorage.removeItem(requestValues[requestValues.length - 1])
         localStorage.setItem('items', JSON.stringify(requestValues));
-      console.log(requestValues.length);
       return prevRequest.insertAdjacentHTML('afterbegin', ` <div class="requestElement">
           <p class="requestElement_title"> ${requestValues[i]}</p>
           <button type="button" class='deleteCityButton'></button>
@@ -210,26 +226,24 @@ console.log(choosedPic)
   
  //TODO: нужно проверять еще есть ли уже такое значени в массиве или нет, эта функ вызывалась в requestValuePush
 
-  function requestValuesPush() {
+   function requestValuesPush() {
+     console.log((input.value.replace(input.value[0], input.value[0].toUpperCase())))
     if (!requestValues.includes(input.value.replace(input.value[0], input.value[0].toUpperCase()))) {
       requestValues.unshift(input.value.replace(input.value[0], input.value[0].toUpperCase()));
       localStorage.setItem('items', JSON.stringify(requestValues));
       previousRequests()
-    } 
+    }
   }
 
-  
-  console.log(localStorage.getItem('items'))
-  console.log('items', JSON.stringify(requestValues))
-  console.log(JSON.parse(localStorage.getItem('items')))
 
-   const prevRequest = document.querySelector('.prevRequest')
+
+
   
   function reload() {
     prevRequest.innerHTML = ''
     if (localStorage.getItem('items') !== []) {
       requestValues.forEach(elem => {
-        console.log(elem)
+
         return prevRequest.insertAdjacentHTML('beforeend', ` <div class="requestElement">
         <p class="requestElement_title"> ${elem}</p>
         <button type="button" class='deleteCityButton'></button>
@@ -275,6 +289,8 @@ reload()
      store.city = 'Minsk'
    } else {
      requestValues.splice(0, 1)
+     requestValues.push(arr[arr.length-1])
+     arr = []
      store.city = requestValues[0]
     }
 
