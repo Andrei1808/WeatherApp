@@ -20,7 +20,7 @@ body{
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    transition-duration: 3s;
+    transition-duration: 2s;
 }
 
 .header{
@@ -34,6 +34,30 @@ body{
 
 }
 
+.clocks{
+    width: 37%;
+    height: 32px;
+    position: absolute;
+    right: 2.5%;
+    color: white;
+    font-size: 30px;
+    text-align: right;
+    font-weight: 700;
+}
+
+.clocks p{
+    font-size: 15px;
+    text-align: right;
+    margin: 0;
+    line-height: 40px;
+}
+
+.clocks span{
+    color: white;
+    font-size: 30px;
+    font-weight: 700;
+    margin:  0 0 0 10px;
+}
 
 .form{
     width: 100%;
@@ -60,6 +84,26 @@ body{
 .header_inputText::placeholder{
     color: rgb(42, 41, 41);
 
+}
+
+.errorMessage{
+    background: rgba(255, 0, 0,.8);
+    font-weight: 500;
+    text-align: center;
+    border-radius: 10px;
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translate(-50%);
+    width: 75%;
+    opacity: 0;
+    transition-duration: .75s;
+}
+
+.showErrorMessage{
+    opacity: 1;
+    transition-duration: 1s;
+   
 }
 
 .header_button{
@@ -95,9 +139,6 @@ body{
     grid-template-rows: 30% 40% 30%;
     grid-template-columns: 60% 40%;                                      
     width: 100%;
-
-   
-
 }
 
 .currentlyWeather{    
@@ -155,6 +196,10 @@ body{
     left: 50%;
     transform: translate(-50%);
     width: 200px;
+}
+
+.imgForLastRequests{
+    background-color: red;
 }
 
 .subInfo{
@@ -380,7 +425,7 @@ body{
 .night-theme{
     width: 100%;
     height: 100%;
-    transition-duration: 3s;
+    transition-duration: 2s;
     background-image: url('img/bgNight.jpg');
     background-position: center;
     background-repeat: no-repeat;

@@ -10,7 +10,9 @@
 </head>
 <body>
     <div class="wrapper">
+        
         <div class="header">
+            <div class="clocks"></div>
             <form class="form">
                 <input type="text" class="header_inputText" placeholder="Search">
                 <button type="submit" class="header_button">Click</button>
@@ -22,6 +24,7 @@
                 <div class="city"></div>
                 <div class="wethDescription"></div>
                 <img class="imgWeather" alt="weatherImg">
+                <div class="errorMessage">The entered value was not found, please try another one.</div>
             </div>
             <div class="subInfo">
                 <div> <img src="https://i.ibb.co/dJ6q2TP/cloud.png" alt="cloud" border="0"><p class="subInfoWrapper"><span class="weatherSubInfo cloudcover"></span><span class="subInfoParameters">cloudcover</span></p></div>
@@ -39,7 +42,10 @@
             </div>
         </div>
         </div>
-    <script src="script.js"></script>
+        <script src="js/weekWeatherFunc.js"></script>
+    <script src="js/dom.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/handlers.js"></script>
     <script src="https://kit.fontawesome.com/f1e8d0e4bb.js" crossorigin="anonymous"></script>
 </body>
 </html>
