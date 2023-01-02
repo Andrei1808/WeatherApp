@@ -1,4 +1,4 @@
-const apiKey = '08823c6a4b3b1dc99b1f2fe807a11809';//FIXME: <======================== Для API
+const apiKey = '';//FIXME: <======================== Для API
 const store = {
   city: 'Minsk',
 };
