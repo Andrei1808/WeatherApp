@@ -12,22 +12,21 @@ const fetchData = async () => {
     }, 1000);
 
     burgerMenuButton.addEventListener('click', (event) => {
-      event.stopImmediatePropagation()
-      requests.classList.toggle('requests_burgerMenu')
+      event.stopImmediatePropagation();
+      requests.classList.toggle('requests_burgerMenu');
       if (requests.classList.contains('requests_burgerMenu')) {
-        weekWeather.classList.add('hide')
-        subInfo.classList.add('hide')
-        currentlyWeather.classList.add('hide')
-        clocks.classList.add('hide')
+        weekWeather.classList.add('hide');
+        subInfo.classList.add('hide');
+        currentlyWeather.classList.add('hide');
+        clocks.classList.add('hide');
       } else {
-        weekWeather.classList.remove('hide')
-        subInfo.classList.remove('hide')
-        currentlyWeather.classList.remove('hide')
-        clocks.classList.remove('hide')
-       }
-    })
+        weekWeather.classList.remove('hide');
+        subInfo.classList.remove('hide');
+        currentlyWeather.classList.remove('hide');
+        clocks.classList.remove('hide');
+      }
+    });
 
-    
     const deleteCityButton = document.querySelectorAll('.deleteCityButton');
 
     deleteCityButton.forEach((elem) => {
@@ -48,22 +47,21 @@ const fetchData = async () => {
       });
     });
 
-
     document.addEventListener('click', (event) => {
       if (event.target.matches('p') && event.target.closest('.requestElement') !== null && window.innerWidth > 768) {
         event.stopImmediatePropagation();
         store.city = event.target.closest('.requestElement_title').textContent;
         weekWeather.innerHTML = '';
         fetchData();
-      } else if(event.target.closest('.requestElement') !== null) {
+      } else if (event.target.closest('.requestElement') !== null) {
         event.stopImmediatePropagation();
         store.city = event.target.closest('.requestElement_title').textContent;
         weekWeather.innerHTML = '';
-        requests.classList.remove('requests_burgerMenu')
-        weekWeather.classList.remove('hide')
-        subInfo.classList.remove('hide')
-        currentlyWeather.classList.remove('hide')
-        clocks.classList.remove('hide')
+        requests.classList.remove('requests_burgerMenu');
+        weekWeather.classList.remove('hide');
+        subInfo.classList.remove('hide');
+        currentlyWeather.classList.remove('hide');
+        clocks.classList.remove('hide');
         fetchData();
       }
     });
@@ -89,8 +87,6 @@ const fetchData = async () => {
       input.value = '';
       weekWeather.innerHTML = '';
     });
-
-
   } catch (err) {
     catchErrorFunc(err);
   }

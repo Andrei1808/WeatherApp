@@ -1,15 +1,19 @@
-const apiKey = '';//FIXME: <======================== Для API
+const apiKey = '08823c6a4b3b1dc99b1f2fe807a11809';// FIXME: <======================== Для API
 const store = {
   city: 'Minsk',
 };
 const form = document.querySelector('.form');
 const wrapper = document.querySelector('.wrapper');
 const input = document.querySelector('.header_inputText');
-const currentlyWeather = document.querySelector('.currentlyWeather')
+
+const currentlyWeather = document.querySelector('.currentlyWeather');
 const weekWeather = document.querySelector('.weekWeather');
+
+const requests = document.querySelector('.requests');
 const requestValues = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : [];
 let arr = [];
 const prevRequest = document.querySelector('.prevRequest');
+
 const temp = document.querySelector('.temp');
 const city = document.querySelector('.city');
 const wethDescription = document.querySelector('.wethDescription');
@@ -21,10 +25,10 @@ const visibility = document.querySelector('.visibility');
 const wind = document.querySelector('.wind');
 const feelsLike = document.querySelector('.feelsLike');
 const subInfo = document.querySelector('.subInfo');
-const requests = document.querySelector('.requests');
+
 const errorMessage = document.querySelector('.errorMessage');
 const clocks = document.querySelector('.clocks');
-const burgerMenuButton = document.querySelector('.burgerMenu')
+const burgerMenuButton = document.querySelector('.burgerMenu');
 
 function currentlyWeatherCreate(data) {
   temp.innerHTML = `${Math.round(data.list[0].main.temp)}°`;
@@ -61,7 +65,7 @@ function weatherForWeekCreate(data) {
       const weatherDescription = [];
       let choosedPic;
 
-      function pushToArr(dailyData) {
+      function pushToArr() {
         dailyData.forEach((elem) => {
           valuesOfMinMaxTemp.push(elem.main.temp);
           valuesOfMinMaxTemp.sort((a, b) => a - b);
@@ -88,7 +92,7 @@ function weatherForWeekCreate(data) {
         });
       }
       weatherPicValue();
-      
+
       function createWeekWeather() {
         weekWeather.innerHTML += `<div class="weekWeather_date">
           <div class="weekWeather_date-wrapper">
@@ -103,11 +107,11 @@ function weatherForWeekCreate(data) {
           </div>        
           <div class="weekWeather_subInfo">
               <p>${choosedDescr[0].split(',')[0].split('.')
-            .map((elem) => (choosedDescr[0]
-            .split(',')[0]
-            .replace(elem[0], elem[0]
-            .toUpperCase())))
-            .join('')}</p>
+    .map((elem) => (choosedDescr[0]
+      .split(',')[0]
+      .replace(elem[0], elem[0]
+        .toUpperCase())))
+    .join('')}</p>
           </div>  
         </div>`;
       }
@@ -129,7 +133,6 @@ function weatherForWeekCreate(data) {
     }
   } catch (err) {
     console.error(err.message);
-    console.log('ERRRORORORORORORO!!!!');
   }
 }
 
@@ -190,4 +193,3 @@ function catchErrorFunc(err) {
 
   fetchData();
 }
-
