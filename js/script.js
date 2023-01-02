@@ -11,11 +11,59 @@ const fetchData = async () => {
       myTimer();
     }, 1000);
 
+    burgerMenuButton.addEventListener('click', (event) => {
+      event.stopImmediatePropagation()
+      requests.classList.toggle('requests_burgerMenu')
+      if (requests.classList.contains('requests_burgerMenu')) {
+        weekWeather.classList.add('hide')
+        subInfo.classList.add('hide')
+        currentlyWeather.classList.add('hide')
+        clocks.classList.add('hide')
+      } else {
+        weekWeather.classList.remove('hide')
+        subInfo.classList.remove('hide')
+        currentlyWeather.classList.remove('hide')
+        clocks.classList.remove('hide')
+       }
+    })
+
+    
+    const deleteCityButton = document.querySelectorAll('.deleteCityButton');
+
+    deleteCityButton.forEach((elem) => {
+      elem.addEventListener('click', (event) => {
+        const deleteCityInArray = event.target.previousElementSibling.textContent.trim();
+        const indexCityInArray = requestValues.indexOf(deleteCityInArray);
+        const deletedCity = elem.closest('.requestElement');
+
+        if (requestValues.length === 1) {
+          requestValues.splice(indexCityInArray, 1);
+          deletedCity.remove();
+          localStorage.clear();
+        } else {
+          requestValues.splice(indexCityInArray, 1);
+          deletedCity.remove();
+          localStorage.setItem('items', JSON.stringify(requestValues));
+        }
+      });
+    });
+
+
     document.addEventListener('click', (event) => {
-      if (event.target.matches('p') && event.target.closest('.requestElement') !== null) {
+      if (event.target.matches('p') && event.target.closest('.requestElement') !== null && window.innerWidth > 768) {
         event.stopImmediatePropagation();
         store.city = event.target.closest('.requestElement_title').textContent;
         weekWeather.innerHTML = '';
+        fetchData();
+      } else if(event.target.closest('.requestElement') !== null) {
+        event.stopImmediatePropagation();
+        store.city = event.target.closest('.requestElement_title').textContent;
+        weekWeather.innerHTML = '';
+        requests.classList.remove('requests_burgerMenu')
+        weekWeather.classList.remove('hide')
+        subInfo.classList.remove('hide')
+        currentlyWeather.classList.remove('hide')
+        clocks.classList.remove('hide')
         fetchData();
       }
     });
@@ -42,25 +90,7 @@ const fetchData = async () => {
       weekWeather.innerHTML = '';
     });
 
-    const deleteCityButton = document.querySelectorAll('.deleteCityButton');
 
-    deleteCityButton.forEach((elem) => {
-      elem.addEventListener('click', (event) => {
-        const deleteCityInArray = event.target.previousElementSibling.textContent.trim();
-        const indexCityInArray = requestValues.indexOf(deleteCityInArray);
-        const deletedCity = elem.closest('.requestElement');
-
-        if (requestValues.length === 1) {
-          requestValues.splice(indexCityInArray, 1);
-          deletedCity.remove();
-          localStorage.clear();
-        } else {
-          requestValues.splice(indexCityInArray, 1);
-          deletedCity.remove();
-          localStorage.setItem('items', JSON.stringify(requestValues));
-        }
-      });
-    });
   } catch (err) {
     catchErrorFunc(err);
   }

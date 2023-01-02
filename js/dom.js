@@ -1,10 +1,11 @@
-const apiKey = '08823c6a4b3b1dc99b1f2fe807a11809';
+const apiKey = '08823c6a4b3b1dc99b1f2fe807a11809';//FIXME: <======================== Для API
 const store = {
   city: 'Minsk',
 };
 const form = document.querySelector('.form');
 const wrapper = document.querySelector('.wrapper');
 const input = document.querySelector('.header_inputText');
+const currentlyWeather = document.querySelector('.currentlyWeather')
 const weekWeather = document.querySelector('.weekWeather');
 const requestValues = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : [];
 let arr = [];
@@ -23,6 +24,7 @@ const subInfo = document.querySelector('.subInfo');
 const requests = document.querySelector('.requests');
 const errorMessage = document.querySelector('.errorMessage');
 const clocks = document.querySelector('.clocks');
+const burgerMenuButton = document.querySelector('.burgerMenu')
 
 function currentlyWeatherCreate(data) {
   temp.innerHTML = `${Math.round(data.list[0].main.temp)}°`;
@@ -188,3 +190,4 @@ function catchErrorFunc(err) {
 
   fetchData();
 }
+
