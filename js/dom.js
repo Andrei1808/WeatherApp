@@ -116,6 +116,7 @@ function weatherForWeekCreate(data) {
         </div>`;
       }
       createWeekWeather();
+      
       function bgTheme() {
         if (data.list[0].sys.pod === 'n') {
           wrapper.classList.add('night-theme');
