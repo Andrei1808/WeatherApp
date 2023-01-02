@@ -290,14 +290,11 @@ body{
     width: 60px;
 }
 
-/* .weekWeather_day{
-    width: 100px;
-} */
-
 .temp_week{
     font-size: 20px;
     width: 75px;
     margin: 0;
+    text-align: center;
 }
 
 .weekWeather_subInfo{
